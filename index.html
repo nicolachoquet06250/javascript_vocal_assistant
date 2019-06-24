@@ -1,14 +1,30 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>API JavaScript de reconnaissence vocale</title>
-</head>
+<meta charset="utf8"/>
 <body>
-    <div id="RecognizingMessage"></div>
-    <div id="SpeechMessage"></div>
-
-    <script src="Artyom/artyom.window.js"></script>
-    <script src="speechRecognitionWithArtyom.js"></script>
+<h1>Logs vocaux</h1>
+<ul id="logs"></ul>
 </body>
-</html>
+<script src="JsAssistant.js"></script>
+<script>
+	let Jarvis = new JsAssistant();
+	Jarvis.addCommandGroup([
+        /bonjour ([a-zA-Z]+)/g,
+        /Salut ([a-zA-Z]+)/g,
+        /Hello ([a-zA-Z]+)/g
+    ], (regex, sentence, first_name) => {
+		let phrase = `Tu as dis ${sentence}. Je m'appel ${first_name} c'est ça ?`;
+        let li = document.createElement('li');
+        li.innerHTML = phrase;
+        document.querySelector('#logs').append(li);
+        console.log(phrase)
+    });
+	Jarvis.addCommand(/(oui )?c'est (bien )?ça/g, (regex, sentence) => {
+		let phrase = 'cool j\'enregistre';
+		let li = document.createElement('li');
+		li.innerHTML = phrase;
+		document.querySelector('#logs').append(li);
+		console.log(phrase)
+	});
+	Jarvis.start({
+        debug: false
+    });
+</script>
