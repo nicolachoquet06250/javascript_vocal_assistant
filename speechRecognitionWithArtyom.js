@@ -3,6 +3,8 @@ const writeErrorMessage = (elem_id, message) =>
 
 const Jarvis = new Artyom();
 
+SpeechSynthesisUtterance.volume = 1;
+
 if (Jarvis.speechSupported()) {
     Jarvis.say(
         "Hello World !", {
@@ -40,7 +42,7 @@ if (Jarvis.recognizingSupported()) {
         },
     ]);
 
-    // Jarvis.simulateInstruction("Hello");
+    Jarvis.simulateInstruction("Hello");
 
     Jarvis.initialize({
         lang: "fr-FR", // Français
