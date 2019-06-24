@@ -54,8 +54,13 @@ var Artyom = (function () {
         };
         // Important: retrieve the voices of the browser as soon as possible.
         // Normally, the execution of speechSynthesis.getVoices will return at the first time an empty array.
-        if (window.hasOwnProperty('speechSynthesis')) {
-            speechSynthesis.getVoices();
+        if (window.hasOwnProperty('speechSynthesis') || window.hasOwnProperty('webkitSpeechSynthesis')) {
+            if(window.hasOwnProperty('speechSynthesis')) {
+                speechSynthesis.getVoices();
+            }
+            else {
+                webkitSpeechSynthesis.getVoices();
+            }
         }
         else {
             console.error("Artyom.js can't speak without the Speech Synthesis API.");
