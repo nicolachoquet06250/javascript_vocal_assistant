@@ -11,8 +11,11 @@ class JsAssistant {
 	static get Synthesis() {
 		return window.speechSynthesis || null;
 	}
-	get SpeakerKey() {
-		return '290b35ce577849d7a28dbc251b6ee081';
+
+	startVocalRecognition(options = {}) {
+		this.lastStartedAt = new Date().getTime();
+		options.keys().length !== 0 ? this.recognition.start(options) : this.recognition.start();
+		return true;
 	}
 
 	constructor() {
@@ -36,23 +39,19 @@ class JsAssistant {
 		return this;
 	}
 	addCommands(...commands) {
-		commands.forEach(command => {
-			this.commands.set(command.sentence, command.callback);
-		});
+		commands.forEach(command => this.addCommand(command['sentence'], command['callback']));
 		return this;
 	}
 	addCommandGroup(sentences, callback) {
 		sentences.forEach(sentence => {
-			this.commands.set(sentence, callback);
-		})
+			let _callback = typeof sentence === 'object' ? sentence['callback'] : callback,
+				_sentence = typeof sentence === 'object' ? sentence['sentence'] : sentence;
+			this.commands.set(_sentence, _callback);
+		});
+		return this;
 	}
 
-	startVocalRecognition() {
-		this.lastStartedAt = new Date().getTime();
-		this.recognition.start();
-	}
-
-	start(options= { continuous: true, lang: 'fr-FR' }) {
+	start(options = { continuous: true, lang: 'fr-FR' }) {
 		this.recognition = new JsAssistant.Recognition();
 		for(let prop in options) {
 			if(prop === 'debug') {
@@ -78,7 +77,7 @@ class JsAssistant {
 				console.log('end voice recognition');
 				let timeSinceLastStart = new Date().getTime() - this.lastStartedAt;
 				timeSinceLastStart < 1000 ?
-					setTimeout(this.startVocalRecognition, 1000 - timeSinceLastStart) : this.startVocalRecognition();
+					setTimeout(() => this.startVocalRecognition(), 1000 - timeSinceLastStart) : () => this.startVocalRecognition();
 			}
 		}
 		this.recognition.onresult = event => {
@@ -107,25 +106,13 @@ class JsAssistant {
 				}
 			}
 		};
-		this.startVocalRecognition();
+		this.startVocalRecognition(options);
 	}
 
 	say(text, options = {}) {
-		// let final_options = {
-		// 	key: this.SpeakerKey,
-		// 	src: text,
-		// 	hl: 'fr-fr',
-		// 	r: 0.5,
-		// 	c: 'mp3',
-		// 	f: '44khz_16bit_stereo',
-		// 	ssml: false
-		// };
-		// for(let option in options) {
-		// 	option === 'lang' ? final_options.hl = options[option] : final_options[option] = options[option];
-		// }
-		function getVoice() {
+		let getVoice = () => {
 			return new Promise(resolve => {
-				let voices = window.speechSynthesis.getVoices();
+				let voices = JsAssistant.Synthesis.getVoices();
 				for(let i = 0; i < voices.length ; i++) {
 					if(voices[i].lang === 'fr-FR' && !voices[i].default) {
 						resolve(voices[i]);
@@ -133,15 +120,14 @@ class JsAssistant {
 					}
 				}
 			});
-		}
+		};
 
 		if(speechSynthesis !== undefined) {
 			speechSynthesis.addEventListener('voiceschanged', () => {
 				getVoice().then(voice => {
-					console.log(voice);
 					let msg = new SpeechSynthesisUtterance(text);
 					msg.voice = voice;
-					window.speechSynthesis.speak(msg)
+					JsAssistant.Synthesis.speak(msg)
 				});
 			});
 		}
@@ -149,65 +135,3 @@ class JsAssistant {
 }
 
 window.JsAssistant = JsAssistant;
-
-// // Initialisation de la reconnaissance vocale en fonction du navigateur
-// // Pour l'instant, seul Google Chrome le supporte
-// let SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition ||
-// 	window.mozSpeechRecognition || window.msSpeechRecognition || window.oSpeechRecognition;
-//
-// let recognition;
-// let lastStartedAt;
-//
-// if (!SpeechRecognition) {
-// 	console.log('Pas de reconnaissance vocale disponible');
-// 	alert('Pas de reconnaissance vocale disponible');
-// } else {
-// 	// Arrêt de l'ensemble des instances déjà démarrées
-// 	if (recognition && recognition.abort) {
-// 		recognition.abort();
-// 	}
-//
-// 	// Initialisation de la reconnaissance vocale
-// 	recognition = new SpeechRecognition();
-// 	// Reconnaissance en continue
-// 	recognition.continuous = true;
-// 	// Langue française
-// 	recognition.lang = 'fr-FR';
-//
-// 	// Evènement de début de la reconnaissance vocale
-// 	recognition.onstart = function() {
-// 		console.log('Démarrage de la reconnaissance');
-// 	};
-//
-// 	// Evènement de fin de la reconnaissance vocale
-// 	// A la fin de la reconnaissance (timeout), il est nécessaire de la redémarrer pour avoir une reconnaissance en continu
-// 	// Ce code a été repris de annyang
-// 	recognition.onend = () => {
-// 		console.log('Fin de la reconnaissance');
-// 		let timeSinceLastStart = new Date().getTime()-lastStartedAt;
-// 		timeSinceLastStart < 1000 ? setTimeout(demarrerReconnaissanceVocale, 1000 - timeSinceLastStart) : demarrerReconnaissanceVocale();
-// 	};
-//
-// 	// Evènement de résultat de la reconnaissance vocale
-// 	recognition.onresult = event => {
-// 		for (let i = event.resultIndex; i < event.results.length; ++i) {
-// 			let texteReconnu = event.results[i][0].transcript;
-// 			console.log('Résultat = ' + texteReconnu);
-// 			// Synthèse vocale de ce qui a été reconnu
-// 			let u = new SpeechSynthesisUtterance();
-// 			u.text = texteReconnu;
-// 			u.lang = 'fr-FR';
-// 			u.rate = 1.2;
-// 			speechSynthesis.speak(u);
-// 		}
-// 	};
-//
-// 	// Démarrage de la reconnaissance vocale
-// 	demarrerReconnaissanceVocale();
-// }
-//
-// function demarrerReconnaissanceVocale() {
-// 	// Démarrage de la reconnaissance vocale
-// 	lastStartedAt = new Date().getTime();
-// 	recognition.start();
-// }

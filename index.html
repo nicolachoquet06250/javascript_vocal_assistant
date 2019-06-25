@@ -13,6 +13,17 @@
 <script>
 	let Jarvis = new JsAssistant();
 	Jarvis.addCommandGroup([
+        {
+            sentence: /réveil toi ([a-zA-Z]+)/g,
+            callback: (regex, sentence, first_name) => {
+                let phrase = 'oui monsieur ?';
+                let li = document.createElement('li');
+                li.innerHTML = phrase;
+                document.querySelector('#logs').append(li);
+                console.log(phrase);
+                Jarvis.say(phrase);
+            }
+        },
         /bonjour ([a-zA-Z]+)/g,
         /Salut ([a-zA-Z]+)/g,
         /Hello ([a-zA-Z]+)/g
@@ -31,7 +42,8 @@
 		console.log(phrase)
 	});
 	Jarvis.start({
-        debug: false
+        debug: false,
+        continuous: true
     });
 
 	Jarvis.say("c'est enregistré !");
