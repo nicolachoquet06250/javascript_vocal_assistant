@@ -4,10 +4,15 @@ class JsAssistant {
 		return !!(window.SpeechRecognition || window.webkitSpeechRecognition ||
 			window.mozSpeechRecognition || window.msSpeechRecognition || window.oSpeechRecognition);
 	}
-
-	static get Object() {
+	static get Recognition() {
 		return window.SpeechRecognition || window.webkitSpeechRecognition ||
-			window.mozSpeechRecognition || window.msSpeechRecognition || window.oSpeechRecognition;
+			window.mozSpeechRecognition || window.msSpeechRecognition || window.oSpeechRecognition || null;
+	}
+	static get Synthesis() {
+		return window.speechSynthesis || null;
+	}
+	get SpeakerKey() {
+		return '290b35ce577849d7a28dbc251b6ee081';
 	}
 
 	constructor() {
@@ -15,9 +20,8 @@ class JsAssistant {
 		this.lastStartedAt = null;
 		this.commands = new Map();
 		this.debug = false;
-		if(!JsAssistant.Object) {
-			throw new ErrorEvent("JsAssistant is not compatible with your navigator !");
-		}
+		if(!JsAssistant.Synthesis) console.warn("JsAssistant synthesis is not compatible with your navigator");
+		if(!JsAssistant.Recognition) throw new ErrorEvent("JsAssistant recognition is not compatible with your navigator !");
 	}
 
 	stop() {
@@ -49,7 +53,7 @@ class JsAssistant {
 	}
 
 	start(options= { continuous: true, lang: 'fr-FR' }) {
-		this.recognition = new JsAssistant.Object();
+		this.recognition = new JsAssistant.Recognition();
 		for(let prop in options) {
 			if(prop === 'debug') {
 				this.debug = options.debug;
@@ -104,6 +108,43 @@ class JsAssistant {
 			}
 		};
 		this.startVocalRecognition();
+	}
+
+	say(text, options = {}) {
+		// let final_options = {
+		// 	key: this.SpeakerKey,
+		// 	src: text,
+		// 	hl: 'fr-fr',
+		// 	r: 0.5,
+		// 	c: 'mp3',
+		// 	f: '44khz_16bit_stereo',
+		// 	ssml: false
+		// };
+		// for(let option in options) {
+		// 	option === 'lang' ? final_options.hl = options[option] : final_options[option] = options[option];
+		// }
+		function getVoice() {
+			return new Promise(resolve => {
+				let voices = window.speechSynthesis.getVoices();
+				for(let i = 0; i < voices.length ; i++) {
+					if(voices[i].lang === 'fr-FR' && !voices[i].default) {
+						resolve(voices[i]);
+						break;
+					}
+				}
+			});
+		}
+
+		if(speechSynthesis !== undefined) {
+			speechSynthesis.addEventListener('voiceschanged', () => {
+				getVoice().then(voice => {
+					console.log(voice);
+					let msg = new SpeechSynthesisUtterance(text);
+					msg.voice = voice;
+					window.speechSynthesis.speak(msg)
+				});
+			});
+		}
 	}
 }
 

@@ -3,6 +3,7 @@
 <h1>Logs vocaux</h1>
 <ul id="logs"></ul>
 </body>
+<script src='voicerss-tts.min.js'></script>
 <script src="JsAssistant.js"></script>
 <script>
 	let Jarvis = new JsAssistant();
@@ -27,4 +28,6 @@
 	Jarvis.start({
         debug: false
     });
+
+	Jarvis.say("c'est enregistré !");
 </script>
