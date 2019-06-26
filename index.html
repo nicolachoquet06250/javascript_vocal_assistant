@@ -11,32 +11,30 @@
 </body>
 <script>
     window.onload = () => {
-	    let artyom = new Artyom();
+	    var artyom = new Artyom();
+
 	    artyom.addCommands([
 		    {
-			    indexes: ["Bonjour"],
-			    action: function(i) {
-			    	artyom.say('Vous avez dis Bonjour ?');
-				    alert('Vous avez dis Bonjour ?');
-				    console.log("Good morning Triggered");
+			    indexes:["Stop listening"],
+			    action:function(i){
+				    artyom.dontObey();
+				    alert("Artyom isn't obeying anymore");
 			    }
 		    },
 		    {
-			    indexes: ["Bonne nuit"],
-			    action: function(i) {
-			    	artyom.say('Vous avez dis Bonne nuit ?');
-			    	alert('Vous avez dis Bonne nuit ?');
-				    console.log("Good night Triggered");
+			    indexes:["Dis bonjour"],
+			    action:function(i){
+				    artyom.say("Bonjour");
 			    }
 		    }
 	    ]);
 
 	    artyom.initialize({
-		    lang: "fr-FR",
-		    obeyKeyword: "Réveille-toi Jarvis",
-            debug: false, // Show what recognizes in the Console
-		    listen: true, // Start listening after this
-		}).then(() => artyom.dontObey());
+		    lang:"fr-FR",
+		    obeyKeyword: "écoute moi",
+		    debug:true, //Show what recognizes in the Console
+		    listen:true //Start listening after this
+	    });
     };
 </script>
 </html>
