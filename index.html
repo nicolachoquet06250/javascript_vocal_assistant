@@ -12,6 +12,7 @@
 <script>
     window.onload = () => {
 	    let artyom = new Artyom();
+	    artyom.dontObey();
 
 	    artyom.addCommands([
 		    {
@@ -32,14 +33,9 @@
 		    }
 	    ]);
 
-        // Or the artisan mode to write less
-
-	    artyom.on(["Bonjour"]).then(function(i) {
-		    console.log("Triggered");
-	    });
-
 	    artyom.initialize({
 		    lang: "fr-FR",
+		    obeyKeyword: "Réveille toi Jarvis ",
             debug: false, // Show what recognizes in the Console
 		    listen: true, // Start listening after this
             continuous: true,
