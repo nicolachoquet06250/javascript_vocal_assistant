@@ -7,12 +7,7 @@
 </head>
 <body>
     Commandes disponnibles:
-    <ul>
-        <li>Dis Bonjour</li>
-        <li>Répète après moi "une phrase"</li>
-        <li>Comment tu t'appel</li>
-        <li>Ton nom est "un nom"</li>
-    </ul>
+    <ul id="commands"></ul>
     <hr>
     <h2>Logs</h2>
     <div>
@@ -36,16 +31,23 @@
             action: (i, sentence) => writeInLogs(sentence)
         }, {
 		    smart: true,
-		    indexes: [ "Tu t'appelles *" ],
+		    indexes: [ "Tu t'appelles *", "Ton nom est *" ],
 		    action: (i, bot_name) => {
 			    window.bot_name = bot_name;
-			    writeInLogs`très bien je m'en rappelerais`;
+			    writeInLogs`très bien je m'en rappellerai`;
 		    }
         }, {
-		    indexes: [ "Comment tu t'appelles" ],
+		    indexes: [ "Comment tu t'appelles", "Quel est ton nom", "Comment t'appelles tu" ],
 		    action: () => writeInLogs(window.bot_name ? "Je m'appelle " + window.bot_name : "Je ne sais pas comment je m'appel. " +
                 "vous ne m'avez pas encore donné de nom.")
 	    } ]);
+
+	    Jarvis.getAvailableCommands()
+            .forEach(command => command.indexes
+                .forEach(index => document.querySelector('#commands')
+                    .innerHTML += `<li>
+                        ${index.indexOf('appelle') !== -1 ? index.replace('*', '"un nom"') : index.replace('*', '"une phrase"')}
+                    </li>`));
 
 	    Jarvis.initialize({
 		    lang:"fr-FR",
