@@ -46,7 +46,7 @@
             .forEach(command => command.indexes
                 .forEach(index => document.querySelector('#commands')
                     .innerHTML += `<li>
-                        ${index.indexOf('appelle') !== -1 ? index.replace('*', '"un nom"') : index.replace('*', '"une phrase"')}
+                        ${index.indexOf('appelle') !== -1 || index.indexOf('nom') !== -1 ? index.replace('*', '"un nom"') : index.replace('*', '"une phrase"')}
                     </li>`));
 
 	    Jarvis.initialize({
