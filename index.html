@@ -20,9 +20,10 @@
             }
         }, {
 	    	smart: true,
-            indexes: [ "Répète après moi *" ],
-            action: function (i, sentence) {
-                alert(sentence);
+            indexes: [ "Répète après moi * et *" ],
+            action: function (i, sentence1, sentence2) {
+                alert(sentence1);
+                alert(sentence2);
             }
         } ]);
 
