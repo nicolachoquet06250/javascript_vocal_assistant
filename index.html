@@ -17,9 +17,6 @@
             indexes: [ "Dis bonjour" ],
             action: function(i) {
 	            alert('bonjour');
-                artyom.say("Bonjour", {
-	                onEnd: () => alert('bonjour')
-                });
             }
         } ]);
 
@@ -27,7 +24,8 @@
 		    lang:"fr-FR",
 		    debug: false,
 		    continuous: true,
-            listen: true
+            listen: true,
+            volume: 1
 	    });
     };
 </script>
