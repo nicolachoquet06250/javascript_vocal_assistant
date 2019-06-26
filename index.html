@@ -13,27 +13,21 @@
     window.onload = () => {
 	    var artyom = new Artyom();
 
-	    artyom.addCommands([
-		    {
-			    indexes:["Stop listening"],
-			    action:function(i){
-				    artyom.dontObey();
-				    alert("Artyom isn't obeying anymore");
-			    }
-		    },
-		    {
-			    indexes:["Dis bonjour"],
-			    action:function(i){
-				    artyom.say("Bonjour");
-			    }
-		    }
-	    ]);
+	    artyom.addCommands([ {
+            indexes:[ "Dis bonjour" ],
+            action: function(i) {
+                artyom.say("Bonjour", {
+                	lang: 'fr-FR',
+	                onEnd: () => alert('bonjour')
+                });
+            }
+        } ]);
 
 	    artyom.initialize({
 		    lang:"fr-FR",
-		    obeyKeyword: "écoute-moi",
-		    debug:true, //Show what recognizes in the Console
-		    listen:true //Start listening after this
+		    debug: false, //Show what recognizes in the Console
+		    continuous: true,
+            listen: true //Start listening after this
 	    });
     };
 </script>
