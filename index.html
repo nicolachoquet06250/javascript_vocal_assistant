@@ -16,8 +16,13 @@
 	    artyom.addCommands([ {
             indexes: [ "Dis bonjour" ],
             action: function(i) {
-            	artyom.say('Bonjour');
 	            alert('bonjour');
+            }
+        }, {
+	    	smart: true,
+            indexes: [ "Répète après moi *" ],
+            action: function (i, sentence) {
+                alert(sentence);
             }
         } ]);
 
