@@ -20,12 +20,25 @@
             }
         }, {
 	    	smart: true,
-            indexes: [ "Répète après moi * et *" ],
+            indexes: [ "Répète après moi *" ],
             action: function (i, sentence1, sentence2) {
                 alert(sentence1);
                 alert(sentence2);
             }
-        } ]);
+        }, {
+		    smart: true,
+		    indexes: [ "Tu t'appel *" ],
+		    action: function (i, bot_name) {
+			    window.bot_name = bot_name;
+			    alert("ok j'enregistre");
+		    }
+        }, {
+		    indexes: [ "Comment tu t'appel ?" ],
+		    action: function (i) {
+		    	alert(window.bot_name ? "Je m'appel " + window.bot_name : "Je ne sais pas comment je m'appel. " +
+                    "vous ne m'avez pas encore donné de nom.")
+		    }
+	    }]);
 
 	    artyom.initialize({
 		    lang:"fr-FR",
