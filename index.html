@@ -16,6 +16,7 @@
 	    artyom.addCommands([ {
             indexes: [ "Dis bonjour" ],
             action: function(i) {
+	            alert('bonjour');
                 artyom.say("Bonjour", {
 	                onEnd: () => alert('bonjour')
                 });
