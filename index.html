@@ -36,14 +36,14 @@
             action: (i, sentence) => writeInLogs(sentence)
         }, {
 		    smart: true,
-		    indexes: [ "Ton nom est *" ],
+		    indexes: [ "Tu t'appelles *" ],
 		    action: (i, bot_name) => {
 			    window.bot_name = bot_name;
 			    writeInLogs`très bien je m'en rappelerais`;
 		    }
         }, {
-		    indexes: [ "Comment tu t'appel" ],
-		    action: () => writeInLogs(window.bot_name ? "Je m'appel " + window.bot_name : "Je ne sais pas comment je m'appel. " +
+		    indexes: [ "Comment tu t'appelles" ],
+		    action: () => writeInLogs(window.bot_name ? "Je m'appelle " + window.bot_name : "Je ne sais pas comment je m'appel. " +
                 "vous ne m'avez pas encore donné de nom.")
 	    } ]);
 
