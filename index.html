@@ -12,8 +12,6 @@
 <script>
     window.onload = () => {
 	    let artyom = new Artyom();
-	    artyom.dontObey();
-
 	    artyom.addCommands([
 		    {
 			    indexes: ["Bonjour"],
@@ -35,7 +33,7 @@
 
 	    artyom.initialize({
 		    lang: "fr-FR",
-		    obeyKeyword: "Réveille toi Jarvis ",
+		    obeyKeyword: "Réveille-toi Jarvis ",
             debug: false, // Show what recognizes in the Console
 		    listen: true, // Start listening after this
 		    speed: 0.9, // Talk a little bit slow
