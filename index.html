@@ -6,40 +6,48 @@
     <script src="artyom/artyom.window.js"></script>
 </head>
 <body>
-<h1>Logs vocaux</h1>
-<ul id="logs"></ul>
+    Commandes disponnibles:
+    <ul>
+        <li>Dis Bonjour</li>
+        <li>Répète après moi "une phrase"</li>
+        <li>Comment tu t'appel</li>
+        <li>Ton nom est "un nom"</li>
+    </ul>
+    <hr>
+    <h2>Logs</h2>
+    <div>
+        <ul id="logs"></ul>
+    </div>
 </body>
 <script>
     window.onload = () => {
-	    var artyom = new Artyom();
+    	function writeInLogs(sentence) {
+		    document.querySelector('#logs').innerHTML += `<li>${sentence}</li>`;
+	    }
 
-	    artyom.addCommands([ {
+	    var Jarvis = new Artyom();
+
+	    Jarvis.addCommands([ {
             indexes: [ "Dis bonjour" ],
-            action: function(i) {
-	            alert('bonjour');
-            }
+            action: () => writeInLogs`bonjour`
         }, {
 	    	smart: true,
             indexes: [ "Répète après moi *" ],
-            action: function (i, sentence) {
-                alert(sentence);
-            }
+            action: (i, sentence) => writeInLogs(sentence)
         }, {
 		    smart: true,
 		    indexes: [ "Ton nom est *" ],
-		    action: function (i, bot_name) {
+		    action: (i, bot_name) => {
 			    window.bot_name = bot_name;
-			    alert("très bien je m'en rappelerais");
+			    writeInLogs`très bien je m'en rappelerais`;
 		    }
         }, {
 		    indexes: [ "Comment tu t'appel" ],
-		    action: function (i) {
-		    	alert(window.bot_name ? "Je m'appel " + window.bot_name : "Je ne sais pas comment je m'appel. " +
-                    "vous ne m'avez pas encore donné de nom.")
-		    }
+		    action: () => writeInLogs(window.bot_name ? "Je m'appel " + window.bot_name : "Je ne sais pas comment je m'appel. " +
+                "vous ne m'avez pas encore donné de nom.")
 	    } ]);
 
-	    artyom.initialize({
+	    Jarvis.initialize({
 		    lang:"fr-FR",
 		    debug: false,
 		    continuous: true,
