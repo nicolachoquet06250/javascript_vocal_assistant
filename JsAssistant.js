@@ -14,7 +14,7 @@ class JsAssistant {
 
 	startVocalRecognition(options = {}) {
 		this.lastStartedAt = new Date().getTime();
-		options.keys().length !== 0 ? this.recognition.start(options) : this.recognition.start();
+		Object.keys(options).length !== 0 ? this.recognition.start(options) : this.recognition.start();
 		return true;
 	}
 
